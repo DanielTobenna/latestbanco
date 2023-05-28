@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<!-- Mirrored from bancodenationale.com/login by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 03 Jan 2023 11:20:21 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+    <meta charset="utf-8">
+    <title>Internet Banking -  Banco De Nationale</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="">
+    <link rel="stylesheet" href="{% static 'fortified/auth/fonts/material-design-iconic-font/css/material-design-iconic-font.css' %}">
+    <link rel="stylesheet" href="{% static 'fortified/auth/css/style.css' %}">
+
+    <link rel="icon" href="{% static 'images/favicon.png' %}" sizes="32x32" />
+    <link rel="icon" href="{% static 'images/favicon.png' %}" sizes="192x192" />
+    <link rel="apple-touch-icon" href="{% static 'images/favicon.png' %}" />
+    <link rel="shortcut icon" href="{% static 'images/favicon.png' %}" type="image/x-icon">
+    <link href="{% static 'fortified/fontawesome/css/all.css' %}" rel="stylesheet">
+    <link href="{% static 'fortified/fontawesome/js/all.js' %}" rel="stylesheet">
+
+    <script src="{% static 'ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js' %}"></script>
+    <!-- Nprogress -->
+    <link href="{% static 'nprogress/nprogress.css' %}" rel='stylesheet' />
+    <script src="{% static 'code.jquery.com/jquery-1.11.2.min.js' %}"></script>
+    <script src="{% static 'nprogress/nprogress.js' %}"></script>
+
+</head>
+<body>
+<div class="wrapper">
+    <div class="image-holder"></div>
+        <style>
+        /* Mark input boxes that gets an error on validation: */
+        input.invalid {
+            background-color: #ffdddd;
+        }
+        select.invalid {
+            background-color: #ffdddd;
+        }
+        /* Hide all steps by default: */
+        .tab {
+            display: none;
+        }
+        button {
+            background-color: #D8000C;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 17px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            opacity: 0.8;
+            background-color: #D8000C;
+        }
+
+        #prevBtn {
+            background-color: #bbbbbb;
+        }
+
+        /* Make circles that indicate the steps of the form: */
+        .step {
+            height: 15px;
+            width: 15px;
+            margin: 0 2px;
+            background-color: #bbbbbb;
+            border: none;
+            border-radius: 50%;
+            display: inline-block;
+            opacity: 0.5;
+        }
+
+        .step.active {
+            opacity: 1;
+        }
+
+        /* Mark the steps that are finished and valid: */
+        .step.finish {
+            background-color: #D8000C;
+        }
+        hr {
+            display: block;
+            height: 0;
+            border: 0;
+            border-top: 3px solid #D8000C;
+            margin: 0;
+            padding: 0;
+        }
+        .error{
+            color: #cd5c5c;
+        }
+        .success{
+            color: #2e8b57;
+        }
+    </style>
+
+    <style>
+        .info-msg,
+        .success-msg,
+        .error-msg {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 3px 3px 3px 3px;
+        }
+        .info-msg {
+            color: #059;
+            background-color: #BEF;
+        }
+        .success-msg {
+            color: #270;
+            background-color: #DFF2BF;
+        }
+        .error-msg {
+            color: #D8000C;
+            background-color: #FFBABA;
+        }
+        .messages{
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+
+<form method="post" style="position: absolute; margin-top: 50%; margin-left: 30%;">
+            {% csrf_token %}
+            <section>
+                <img src="{% static 'imgages/logo-black.png' %}" alt="" />
+            </section>
+
+            <label>Username</label>
+            <input style="color: #000000 !important; font-weight: bold;" type="text" class="form-control" id="acctnumber"  placeholder="Username" name="username">
+
+            <label>Password</label>
+            <input style="color: #000000 !important; font-weight: bold;" type="password" class="form-control" id="passw" placeholder="Account Password" name="passw">
+
+            <button type="submit" class="btn btn-primary btn-gradient btn-block">
+                                <i class="batch-icon batch-icon-key"></i>
+                                Sign In
+                            </button>
+
+            <div class="custom-control custom-checkbox mb-3">
+                                <input type="checkbox" class="custom-control-input" id="keep-signed-in">
+                                <label style="color: #ffffff !important; font-weight: bold;" class="custom-control-label" for="keep-signed-in">Keep Me Signed In</label>
+                            </div>
+
+            <div>
+               <span style="color: #ffffff !important; font-weight: bold;"> Not a member </span> ? <a style="color: #ffffff !important; font-weight: bold;" href="{% url 'signup' %}">Sign up now</a><br />
+            </div>
+            {% for message in messages %}
+
+                    <p class="messages">{{message}}</p>
+
+                {% endfor %}
+        </form>
+
+    <!-- <script>
+        $( "#login-form" ).submit(function( event ) {
+            $.ajax({
+                method: "POST",
+                url: "https://bancodenationale.com/authenticate/login",
+                data: $( "#login-form" ).serialize(),
+                beforeSend: function() {
+                    NProgress.start()
+                    $('.error-msg').css('display','none')
+                    $('#login-button').html('Accessing')
+                }
+            }).done(function( res ) {
+                if(res.status === true){
+                    $('#login-button').html('Access')
+                    window.location.replace(res.redirect);
+                }else{
+                    let t = "1";
+                    if(res.auth == t){
+                        $(".authenticate").css('display','block');
+                        $("#code").prop('required',true);
+                        $('.info-msg').css('display','block').find('span').html(res.message)
+                        $('#login-button').html('Access')
+                    }else{
+                        $('.error-msg').css('display','block').find('span').html(res.message)
+                        $('#login-button').html('Access')
+                    }
+                }
+            }).fail(function() {
+                $('.error-msg').css('display','block').find('span').html('An error occurred somewhere')
+                $('#login-button').html('Access')
+            });
+            NProgress.done()
+            event.preventDefault();
+        });
+    </script>
+
+    <script>
+        function usernameCheck() {
+            let username = $("#username").val();
+            if(username === ""){
+                $("#username").attr("placeholder", " ").val('');
+                $('#username-availability').css('display', 'none')
+            }else{
+                $.ajax({
+                    url: "https://bancodenationale.com/fire/username",
+                    type: 'GET',
+                    data: {username:username},
+                    beforeSend: function() {
+                        $('#username-availability').css('display', 'block').html("Checking availability").removeClass('error').removeClass('success')
+                    }
+                }).done(function( res ) {
+                    if(res.status === true){
+                        $("#username").attr("placeholder", " ");
+                        $("#username-availability").removeClass('error').addClass('success').css('display', 'block').html(res.message)
+                    }else{
+                        $("#username").attr("placeholder", username).val('');
+                        $("#username-availability").removeClass('success').addClass('error').css('display', 'block').html(res.message)
+                    }
+                }).fail(function() {
+
+                });
+            }
+        }
+    </script>
+</div>
+
+<script>
+    // load nprogress as page loads
+    $('body').show();
+    $('.version').text(NProgress.version);
+    NProgress.start();
+    document.onreadystatechange = function () {
+        if (document.readyState == 'complete') {
+            NProgress.done();
+        }
+    }
+</script>
+
+-->
+</body>
+</html>
